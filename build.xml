@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Facebook" default="jar">
+	<property name="src.dir" value="src/freenet-facebook" />
+	<property name="build.dir" value="build" />
+	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="jar.dir" value="${build.dir}/jar" />
+	<property name="main-class" value="facebook.Facebook" />
+	<property name="facebook-java-api" value="facebook-java-api-2.1.1-SNAPSHOT" />
+	<property name="json" value="json-20070829" />
+	<property name="commons-lang" value="commons-lang-2.4" />
+	<property name="commons-logging" value="commons-logging-1.1.1" />
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="compile">
+		<mkdir dir="${classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" encoding="UTF-8" debug="on">
+			<classpath>
+				<pathelement location="/home/jonas/Freenet/freenet.jar" />
+				<pathelement location="lib/${facebook-java-api}.jar" />
+				<pathelement location="lib/${json}.jar" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="jar" depends="clean,compile">
+		<mkdir dir="${jar.dir}" />
+		<unzip src="lib/${facebook-java-api}.jar" dest="${classes.dir}" />
+		<unzip src="lib/${json}.jar" dest="${classes.dir}" />
+		<unzip src="lib/${commons-lang}.jar" dest="${classes.dir}" />
+		<unzip src="lib/${commons-logging}.jar" dest="${classes.dir}" />
+		<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}" includes="**/*.class">
+			<manifest>
+				<attribute name="Plugin-Main-Class" value="${main-class}" />
+			</manifest>
+		</jar>
+	</target>
+
+</project>
